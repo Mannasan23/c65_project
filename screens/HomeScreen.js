@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { Header } from 'react-native-elements';
 
 export default class HomeScreen extends React.Component {
@@ -29,8 +29,8 @@ export default class HomeScreen extends React.Component {
           var meaning = responseObject.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0]
           this.setState({
             "word" : word.trim(),
-            "lexicography" : lexicography === undefined ? "" : lexicalCategory.trim(),
-            "meaning" : meaning === undefined ? "" : definition.trim(),
+            "lexicography" : lexicography === undefined? "" : lexicography.trim(),
+            "meaning" : meaning === undefined? "" : meaning.trim(),
           })
         })
       }
