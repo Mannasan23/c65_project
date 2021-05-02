@@ -88,7 +88,7 @@ export default class HomeScreen extends React.Component {
                         <Text style={styles.detailsTitle}>
                           Type :{" "}
                         </Text>
-                        <Text style={{fontSize:18, fontStyle: 'bold'}}>
+                        <Text style={{fontSize: 18, fontStyle: 'bold'}}>
                           {this.state.lexicography}
                         </Text>
                       </View>
