@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { Header } from 'react-native-elements';
-import db from '../localdb';
 
 export default class HomeScreen extends React.Component {
     constructor() {
@@ -16,26 +15,24 @@ export default class HomeScreen extends React.Component {
         };
     }
 
-    getWord = (text) => {
-      var text = text.toLowerCase()
-      try{
-        var word = db[text]["word"]
-        var lexicography = db[text]["lexicography"]
-        var meaning = db[text]["meaning"]
-        this.setState({
-          "word" : word,
-          "lexicography" : lexicography,
-          "meaning" : meaning
+    getWord=(word)=>{
+        var url = "https://whitehat-dictionary.glitch.me/?word=" + word
+        return fetch(url)
+        .then((data)=>{
+          return data.json()
+        })
+        .then((response)=>{
+          var responseObject = JSON.parse(response);
+          var word = responseObject.word
+          var lexicography = responseObject.results[0].lexicalEntries[0].lexicalCategory.text
+          var meaning = responseObject.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0]
+          this.setState({
+            "word" : word.trim(),
+            "lexicography" : lexicography === undefined? "" : lexicography.trim(),
+            "meaning" : meaning === undefined? "" : meaning.trim(),
+          })
         })
       }
-      catch(err){
-        alert("This word is unavailable")
-        this.setState({
-          'text':'',
-          'pressSearch':false
-        })
-      }
-    }
     
 
     render() {
@@ -51,7 +48,7 @@ export default class HomeScreen extends React.Component {
                     word: "Receiving...",
                     lexicography :'',
                     examples : [],
-                    meaning : ""
+                    defination : ""
                   });
                 }}
                 value={this.state.text}
@@ -124,27 +121,22 @@ const styles = StyleSheet.create({
     },
 
     enterBox: {
-      flex: 0.25,
-      alignItems: 'center',
-      justifyContent: 'center'
+        flex: 1,
+        justifyContent:'center'
       },
 
     inputBox: {
-      width: '70%',
-      alignSelf: 'center',
-      height: 40,
-      textAlign: 'center',
-      borderWidth: 3,
+        width: '91%',
+        height: 50,
+        borderWidth: 4,
       },
 
     searchIcon: {
-      width: '50%',
-      height: 40,
-      justifyContent: 'center',
-      alignItems: 'center',
-      margin: 10,
-      borderWidth: 3,
-      borderRadius: 11,
+        width: '50%',
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
     },
 
     searchWord: {
@@ -153,17 +145,16 @@ const styles = StyleSheet.create({
     },
       
     outputBox: {
-      flex: 0.7,
-      alignItems:'center'
+        alignItems: 'center'
     },
       
     detailsBox: {
-      flexDirection: 'row',
-      alignItems: 'center'
+        alignItems: 'center'
     },
       
     detailsTitle: {
         color: 'orange',
         fontSize: 18,
+        fontWeight: 'bold'
     }   
 });
