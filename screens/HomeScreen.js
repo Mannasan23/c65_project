@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { Header } from 'react-native-elements';
 import db from '../localdb';
+import * as Speech from 'expo-speech';
 
 export default class HomeScreen extends React.Component {
     constructor() {
@@ -36,7 +37,10 @@ export default class HomeScreen extends React.Component {
         })
       }
     }
-    
+
+    speak = () => {
+      Speech.speak(this.state.word)
+    }    
 
     render() {
         return(
@@ -101,6 +105,14 @@ export default class HomeScreen extends React.Component {
                         <Text style={{ fontSize:19}}>
                           {this.state.meaning}
                         </Text>
+                        <TouchableOpacity style={styles.speechButton}
+                        onPress = {
+                          this.speak
+                        }>
+                          <Text>
+                            {this.state.word}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   )
@@ -165,5 +177,15 @@ const styles = StyleSheet.create({
     detailsTitle: {
         color: 'orange',
         fontSize: 18,
-    }   
+    },
+    
+    speechButton: {
+      width: '40%',
+      height: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 10,
+      borderWidth: 3,
+      borderRadius: 11,
+    }
 });
